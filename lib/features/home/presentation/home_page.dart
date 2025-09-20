@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:word_game/features/home/widgets/slider_selection_widget.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   static const String route = '/';
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  double wordLength = 4;
+  double attemptsCount = 5;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,11 +39,37 @@ class HomePage extends StatelessWidget {
               SizedBox(height: 32),
               SliderSelectionWidget(
                 title: 'Word Length',
-                value: 5,
+                value: wordLength,
                 minValue: 4,
                 maxValue: 7,
-                onChanged: (value) {},
+                divisions: 3,
+                onChanged: (value) {
+                  setState(() {
+                    wordLength = value;
+                  });
+                },
               ),
+              SizedBox(height: 32),
+              SliderSelectionWidget(
+                title: 'Attempts Count',
+                value: attemptsCount,
+                minValue: 3,
+                maxValue: 7,
+                divisions: 4,
+                onChanged: (value) {
+                  setState(() {
+                    attemptsCount = value;
+                  });
+                },
+              ),
+              Spacer(),
+              ElevatedButton(onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.symmetric(vertical: 18),
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                foregroundColor: Theme.of(context).colorScheme.surface,
+              ),
+               child: Text('Start Game')),
             ],
           ),
         ),
