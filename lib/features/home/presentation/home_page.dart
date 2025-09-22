@@ -63,13 +63,25 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
               Spacer(),
-              ElevatedButton(onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(vertical: 18),
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                foregroundColor: Theme.of(context).colorScheme.surface,
+              SizedBox(
+                width: double.maxFinite,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(vertical: 18),
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    foregroundColor: Theme.of(context).colorScheme.surface,
+                    elevation: 5,
+                    shadowColor: Colors.black.withOpacity(0.3),
+                  ),
+                  child: Text(
+                    'Start Game',
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ),
-               child: Text('Start Game')),
             ],
           ),
         ),
