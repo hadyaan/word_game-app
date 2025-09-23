@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:word_game/features/game/presentation/page/game_page.dart';
 import 'package:word_game/features/home/widgets/slider_selection_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -66,7 +68,14 @@ class _HomePageState extends State<HomePage> {
               SizedBox(
                 width: double.maxFinite,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    context.push(
+                      GamePage.route(
+                        wordLength: wordLength.toInt(),
+                        attemptsCount: attemptsCount.toInt(),
+                      ),
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.symmetric(vertical: 18),
                     backgroundColor: Theme.of(context).colorScheme.primary,
