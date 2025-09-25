@@ -51,8 +51,12 @@ class GamePage extends StatelessWidget {
                   onKeyPressed: (v) {
                     context.read<GameBloc>().add(EnterKeyEvent(key: v));
                   },
-                  onDelete: () {},
-                  onSubmit: () {},
+                  onDelete: () {
+                    context.read<GameBloc>().add(DeleteKeyEvent());
+                  },
+                  onSubmit: () {
+                    context.read<GameBloc>().add(EnterAttemptEvent());
+                  },
                 ),
               ],
             ),

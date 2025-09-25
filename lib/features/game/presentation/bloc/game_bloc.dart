@@ -8,6 +8,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   GameBloc() : super(GameState.initial()) {
     on<StartGameEvent>(onStartGameEvent);
     on<EnterKeyEvent>(onEnterKeyEvent);
+    on<DeleteKeyEvent>(onDeleteKeyEvent);
   }
 
   Future onStartGameEvent(StartGameEvent event, Emitter<GameState> emit) async {
@@ -35,6 +36,19 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       state.copyWith(
         currentAttempt: currentAttempt + event.key,
         status: GameStatus.inProgress,
+      ),
+    );
+  }
+
+  Future onDeleteKeyEvent(DeleteKeyEvent event, Emitter<GameState> emit) async {
+    var currentAttempt = state.currentAttempt ?? '';
+    if (currentAttempt.isEmpty) {
+      return;
+    }
+    emit(
+      state.copyWith(
+        status: GameStatus.inProgress,
+        currentAttempt: currentAttempt.substring(0, currentAttempt.length - 1),
       ),
     );
   }
