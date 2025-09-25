@@ -9,6 +9,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     on<StartGameEvent>(onStartGameEvent);
     on<EnterKeyEvent>(onEnterKeyEvent);
     on<DeleteKeyEvent>(onDeleteKeyEvent);
+    on<EnterAttemptEvent>(onEnterAttemptEvent);
   }
 
   Future onStartGameEvent(StartGameEvent event, Emitter<GameState> emit) async {
@@ -49,6 +50,25 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       state.copyWith(
         status: GameStatus.inProgress,
         currentAttempt: currentAttempt.substring(0, currentAttempt.length - 1),
+      ),
+    );
+  }
+
+  Future onEnterAttemptEvent(
+    EnterAttemptEvent event,
+    Emitter<GameState> emit,
+  ) async {
+    var word = state.word ?? '';
+    var currentAttempt = state.currentAttempt ?? '';
+    var attempts = state.attempts ?? [];
+    if (word.isEmpty || currentAttempt.length < word.length) {
+      return;
+    }
+    emit(
+      state.copyWith(
+        status: GameStatus.inProgress,
+        attempts: [...attempts, currentAttempt],
+        currentAttempt: '',
       ),
     );
   }

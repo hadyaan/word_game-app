@@ -51,6 +51,8 @@ class GameKeyboard extends StatelessWidget {
   }
 
   Widget _buildActionRow(BuildContext context, GameState state) {
+    var currentAttempt = state.currentAttempt ?? '';
+    var word = state.word ?? '';
     return Row(
       children: [
         Expanded(
@@ -79,9 +81,11 @@ class GameKeyboard extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(4),
               child: ElevatedButton(
-                onPressed: () {
-                  onSubmit();
-                },
+                onPressed: currentAttempt.length < word.length
+                    ? null
+                    : () {
+                        onSubmit();
+                      },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.green,
                   shape: RoundedRectangleBorder(
