@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:word_game/core/get_it/get_it.dart';
+import 'package:word_game/features/game/presentation/bloc/game_bloc.dart';
 import 'package:word_game/features/game/presentation/page/game_page.dart';
 import 'package:word_game/features/home/widgets/slider_selection_widget.dart';
 
@@ -15,6 +18,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   double wordLength = 4;
   double attemptsCount = 5;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
