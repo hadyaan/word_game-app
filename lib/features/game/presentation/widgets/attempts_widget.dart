@@ -22,7 +22,7 @@ class AttemptsWidget extends StatelessWidget {
                 return SizedBox(height: 10);
               },
               itemCount: state.attemptsCount ?? 0,
-              shrinkWrap: true,
+              // shrinkWrap: true,
             ),
           ),
         );
