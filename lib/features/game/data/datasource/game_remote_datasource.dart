@@ -7,7 +7,7 @@ class GameRemoteDatasource {
 
   Future<String> getRandomWord(int length) async {
     var result = await dio.get(
-      'https//random-word-api.herokuapp.com/word',
+      'https://random-word-api.herokuapp.com/word',
       queryParameters: {'length': length},
     );
     return (result.data as List).first;
