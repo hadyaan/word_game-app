@@ -117,19 +117,73 @@ class GameKeyboard extends StatelessWidget {
             onPressed: () => onKeyPressed(key),
             style: ElevatedButton.styleFrom(
               padding: EdgeInsets.zero,
+              backgroundColor: getKeyColor(context, state, key),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
             child: Text(
               key,
-              style: Theme.of(
-                context,
-              ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: getTextColor(context, state, key),
+              ),
             ),
           ),
         ),
       ),
     );
+  }
+
+  Color getKeyColor(BuildContext context, GameState state, String key) {
+    final attempts = state.attempts ?? [];
+    final word = state.word ?? '';
+
+    for (final attempt in attempts) {
+      for (int i = 0; i < attempt.length; i++) {
+        if (attempt[i] == key && key == word[i]) {
+          return AppColors.green;
+        }
+      }
+    }
+
+    if (word.contains(key)) {
+      for (final attempt in attempts) {
+        if (attempt.contains(key)) {
+          return AppColors.yellow;
+        }
+      }
+    }
+
+    for (final attempt in attempts) {
+      if (attempt.contains(key)) {
+        return Theme.of(context).colorScheme.onSurfaceVariant;
+      }
+    }
+
+    return Theme.of(context).colorScheme.surface;
+  }
+
+  Color getTextColor(BuildContext context, GameState state, String key) {
+    final attempts = state.attempts ?? [];
+    final word = state.word ?? '';
+
+    for (final attempt in attempts) {
+      for (int i = 0; i < attempts.length; i++) {
+        if (attempt[i] == key && key == word[i]) {
+          return Theme.of(context).colorScheme.surface;
+        }
+      }
+    }
+
+    if (word.contains(key)) {
+      for (final attempt in attempts) {
+        if (attempt.contains(key)) {
+          return Theme.of(context).colorScheme.surface;
+        }
+      }
+    }
+
+    return Theme.of(context).colorScheme.onSurface;
   }
 }
