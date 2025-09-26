@@ -3,10 +3,13 @@ import 'package:word_game/features/game/presentation/bloc/game_bloc.dart';
 
 var getIt = GetIt.instance;
 
-void setup(){
+void setup() {
   registerBloc();
 }
 
+void registerRepositories(){
+  // TODO
+}
 void registerBloc() {
-  getIt.registerFactory<GameBloc>(() => GameBloc());
+  getIt.registerFactory<GameBloc>(() => GameBloc(gameRepository: getIt()));
 }
