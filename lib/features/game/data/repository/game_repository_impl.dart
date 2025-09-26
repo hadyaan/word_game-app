@@ -25,6 +25,11 @@ class GameRepositoryImpl implements GameRepository {
   Future<Either<Failure, String>> getRandomWord(int length) async {
     try {
       var result = await gameRemoteDatasource.getRandomWord(length);
+      try {
+        await gameRemoteDatasource.checkWord(result);
+      } catch (e) {
+        return getRandomWord(length);
+      }
       return Right(result);
     } catch (e) {
       return Left(GameFailure(message: 'Error'));
