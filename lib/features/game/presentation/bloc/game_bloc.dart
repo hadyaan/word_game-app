@@ -1,11 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:word_game/features/game/domain/game_repository.dart';
 import 'package:word_game/features/game/presentation/bloc/game_event.dart';
 import 'package:word_game/features/game/presentation/bloc/game_state.dart';
 
 class GameBloc extends Bloc<GameEvent, GameState> {
-  GameBloc() : super(GameState.initial()) {
+  final GameRepository gameRepository;
+  GameBloc({required this.gameRepository}) : super(GameState.initial()) {
     on<StartGameEvent>(onStartGameEvent);
     on<EnterKeyEvent>(onEnterKeyEvent);
     on<DeleteKeyEvent>(onDeleteKeyEvent);
@@ -13,13 +15,20 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   }
 
   Future onStartGameEvent(StartGameEvent event, Emitter<GameState> emit) async {
-    emit(
+    emit(state.copyWith(status: GameStatus.loading));
+    var result = await gameRepository.getRandomWord(event.wordLength);
+    result.fold((l) {
+      emit(state.copyWith(status: GameStatus.error, errorMessage: l.message));
+    }, (r) {
+      emit(
       state.copyWith(
         status: GameStatus.inProgress,
-        word: 'TEST',
+        word: r,
         attemptsCount: event.attemptsCount,
       ),
     );
+    });
+    
   }
 
   Future onEnterKeyEvent(EnterKeyEvent event, Emitter<GameState> emit) async {
@@ -74,6 +83,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
     if (word == currentAttempt) {
       emit(state.copyWith(status: GameStatus.win));
+    } else if ((state.attempts?.length ?? 0) == (state.attemptsCount ?? 0)) {
+      emit(state.copyWith(status: GameStatus.loss));
     }
   }
 }
