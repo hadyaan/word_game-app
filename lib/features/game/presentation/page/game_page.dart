@@ -7,6 +7,7 @@ import 'package:word_game/features/game/presentation/bloc/game_event.dart';
 import 'package:word_game/features/game/presentation/bloc/game_state.dart';
 import 'package:word_game/features/game/presentation/widgets/attempts_widget.dart';
 import 'package:word_game/features/game/presentation/widgets/game_keyboard.dart';
+import 'package:word_game/features/game/presentation/widgets/loss_dialog.dart';
 import 'package:word_game/features/game/presentation/widgets/win_dialog.dart';
 
 class GamePage extends StatelessWidget {
@@ -69,6 +70,14 @@ class GamePage extends StatelessWidget {
               context: context,
               builder: (context) {
                 return WinDialog(word: state.word ?? '');
+              },
+              barrierDismissible: false,
+            );
+          } else if (state.status == GameStatus.loss) {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return LossDialog(word: state.word ?? '');
               },
               barrierDismissible: false,
             );

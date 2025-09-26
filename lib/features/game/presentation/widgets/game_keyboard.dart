@@ -169,7 +169,7 @@ class GameKeyboard extends StatelessWidget {
     final word = state.word ?? '';
 
     for (final attempt in attempts) {
-      for (int i = 0; i < attempts.length; i++) {
+      for (int i = 0; i < attempt.length; i++) {
         if (attempt[i] == key && key == word[i]) {
           return Theme.of(context).colorScheme.surface;
         }
