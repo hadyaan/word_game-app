@@ -37,6 +37,11 @@ class GamePage extends StatelessWidget {
         ),
       child: BlocConsumer<GameBloc, GameState>(
         builder: (context, state) {
+          if (state.status == GameStatus.loading) {
+            return Scaffold(
+              body: Center(child: CircularProgressIndicator.adaptive()),
+            );
+          }
           return Scaffold(
             appBar: AppBar(
               title: Text(
@@ -47,8 +52,9 @@ class GamePage extends StatelessWidget {
             body: Column(
               children: [
                 SizedBox(height: 20),
-                AttemptsWidget(),
-                Spacer(),
+                Expanded(child: AttemptsWidget()),
+                // Text('${state.word}'),
+                SizedBox(height: 20),
                 GameKeyboard(
                   onKeyPressed: (v) {
                     context.read<GameBloc>().add(EnterKeyEvent(key: v));
@@ -81,6 +87,10 @@ class GamePage extends StatelessWidget {
               },
               barrierDismissible: false,
             );
+          } else if (state.status == GameStatus.error) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text('${state.errorMessage}')));
           }
         },
       ),
