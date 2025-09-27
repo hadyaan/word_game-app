@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:word_game/core/get_it/get_it.dart';
+import 'package:word_game/features/game/data/repository/game_repository_impl.dart';
 import 'package:word_game/features/game/presentation/bloc/game_bloc.dart';
 import 'package:word_game/features/game/presentation/bloc/game_event.dart';
 import 'package:word_game/features/game/presentation/bloc/game_state.dart';
@@ -19,34 +20,33 @@ class GamePage extends StatelessWidget {
     super.key,
     required this.attemptsCount,
     required this.wordLength,
-    required this.language, 
+    required this.language,
   });
 
   static String route({
     required int wordLength,
     required int attemptsCount,
-    required String language, 
-  }) =>
-      Uri(
-        path: '/game',
-        queryParameters: {
-          'attemptsCount': attemptsCount.toString(),
-          'wordLength': wordLength.toString(),
-          'language': language,
-        },
-      ).toString();
+    required String language,
+  }) => Uri(
+    path: '/game',
+    queryParameters: {
+      'attemptsCount': attemptsCount.toString(),
+      'wordLength': wordLength.toString(),
+      'language': language,
+    },
+  ).toString();
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<GameBloc>()
-        ..add(
-          StartGameEvent(
-            attemptsCount: attemptsCount,
-            wordLength: wordLength,
-            language: language, //  Kirim ke event
+      create: (context) =>
+          GameBloc(gameRepository: GameRepositoryImpl(language: language))..add(
+            StartGameEvent(
+              attemptsCount: attemptsCount,
+              wordLength: wordLength,
+              language: language, //  Kirim ke event
+            ),
           ),
-        ),
       child: BlocConsumer<GameBloc, GameState>(
         builder: (context, state) {
           if (state.status == GameStatus.loading) {
@@ -100,9 +100,9 @@ class GamePage extends StatelessWidget {
               barrierDismissible: false,
             );
           } else if (state.status == GameStatus.error) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('${state.errorMessage}')),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text('${state.errorMessage}')));
           }
         },
       ),

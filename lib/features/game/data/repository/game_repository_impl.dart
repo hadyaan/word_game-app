@@ -4,14 +4,24 @@ import 'package:word_game/features/game/data/datasource/local_word_datasource.da
 import 'package:word_game/features/game/domain/game_repository.dart';
 
 class GameRepositoryImpl implements GameRepository {
-  GameRepositoryImpl();
+  final String language; // simpan bahasa pilihan
+
+  GameRepositoryImpl({required this.language});
 
   @override
   Future<Either<Failure, void>> checkWord(String word) async {
-    // Sementara: terima semua kata (return Right(null))
-    // Jika nanti ingin validasi, bisa implement cek ke local wordlists
-    // atau kembali memakai API untuk memvalidasi kata yang valid.
-    return Right(null);
+    try {
+      final localWordDatasource = LocalWordDatasource(language: language);
+      final isValid = await localWordDatasource.checkWord(word);
+
+      if (isValid) {
+        return Right(null); // Kata valid
+      } else {
+        return Left(GameFailure(message: 'Please enter the correct word'));
+      }
+    } catch (_) {
+      return Left(GameFailure(message: 'Error validating word'));
+    }
   }
 
   @override
@@ -20,7 +30,6 @@ class GameRepositoryImpl implements GameRepository {
     String language = 'en',
   }) async {
     try {
-      // buat datasource lokal sesuai bahasa saat runtime
       final localWordDatasource = LocalWordDatasource(language: language);
       final word = await localWordDatasource.getRandomWord(length);
       return Right(word);
