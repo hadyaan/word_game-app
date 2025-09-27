@@ -3,8 +3,9 @@ abstract class GameEvent {}
 class StartGameEvent extends GameEvent {
   final int attemptsCount;
   final int wordLength;
+  final String language;
 
-  StartGameEvent({required this.attemptsCount, required this.wordLength});
+  StartGameEvent({required this.attemptsCount, required this.wordLength, required this.language});
 }
 
 class EnterAttemptEvent extends GameEvent {}

@@ -13,18 +13,26 @@ import 'package:word_game/features/game/presentation/widgets/win_dialog.dart';
 class GamePage extends StatelessWidget {
   final int attemptsCount;
   final int wordLength;
+  final String language;
 
   const GamePage({
     super.key,
     required this.attemptsCount,
     required this.wordLength,
+    required this.language, 
   });
-  static String route({required int wordLength, required int attemptsCount}) =>
+
+  static String route({
+    required int wordLength,
+    required int attemptsCount,
+    required String language, 
+  }) =>
       Uri(
         path: '/game',
         queryParameters: {
           'attemptsCount': attemptsCount.toString(),
           'wordLength': wordLength.toString(),
+          'language': language,
         },
       ).toString();
 
@@ -33,12 +41,16 @@ class GamePage extends StatelessWidget {
     return BlocProvider(
       create: (context) => getIt<GameBloc>()
         ..add(
-          StartGameEvent(attemptsCount: attemptsCount, wordLength: wordLength),
+          StartGameEvent(
+            attemptsCount: attemptsCount,
+            wordLength: wordLength,
+            language: language, //  Kirim ke event
+          ),
         ),
       child: BlocConsumer<GameBloc, GameState>(
         builder: (context, state) {
           if (state.status == GameStatus.loading) {
-            return Scaffold(
+            return const Scaffold(
               body: Center(child: CircularProgressIndicator.adaptive()),
             );
           }
@@ -51,10 +63,10 @@ class GamePage extends StatelessWidget {
             ),
             body: Column(
               children: [
-                SizedBox(height: 20),
-                Expanded(child: AttemptsWidget()),
+                const SizedBox(height: 20),
+                const Expanded(child: AttemptsWidget()),
                 // Text('${state.word}'),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 GameKeyboard(
                   onKeyPressed: (v) {
                     context.read<GameBloc>().add(EnterKeyEvent(key: v));
@@ -88,9 +100,9 @@ class GamePage extends StatelessWidget {
               barrierDismissible: false,
             );
           } else if (state.status == GameStatus.error) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text('${state.errorMessage}')));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('${state.errorMessage}')),
+            );
           }
         },
       ),

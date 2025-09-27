@@ -16,7 +16,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
   Future onStartGameEvent(StartGameEvent event, Emitter<GameState> emit) async {
     emit(state.copyWith(status: GameStatus.loading));
-    var result = await gameRepository.getRandomWord(event.wordLength);
+
+    var result = await gameRepository.getRandomWord(
+      event.wordLength,
+      language: event.language,
+    );
+
     result.fold(
       (l) {
         emit(state.copyWith(status: GameStatus.error, errorMessage: l.message));
