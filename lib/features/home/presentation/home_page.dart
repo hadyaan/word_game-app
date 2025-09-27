@@ -18,6 +18,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   double wordLength = 4;
   double attemptsCount = 5;
+  String selectedLanguage = "en";
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +43,38 @@ class _HomePageState extends State<HomePage> {
                   context,
                 ).textTheme.bodyLarge?.copyWith(fontSize: 20),
               ),
-              SizedBox(height: 32),
+              SizedBox(height: 24),
+              // ✅ Language selector
+              Text("Language", style: Theme.of(context).textTheme.headlineSmall),
+              SizedBox(height: 2),
+
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  RadioListTile<String>(
+                    title: const Text("English"),
+                    value: "en",
+                    groupValue: selectedLanguage,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedLanguage = value!;
+                      });
+                    },
+                  ),
+                  RadioListTile<String>(
+                    title: const Text("Indonesia"),
+                    value: "id",
+                    groupValue: selectedLanguage,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedLanguage = value!;
+                      });
+                    },
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 16),
               SliderSelectionWidget(
                 title: 'Word Length',
                 value: wordLength,
@@ -77,6 +109,7 @@ class _HomePageState extends State<HomePage> {
                       GamePage.route(
                         wordLength: wordLength.toInt(),
                         attemptsCount: attemptsCount.toInt(),
+                        language: selectedLanguage,
                       ),
                     );
                   },
